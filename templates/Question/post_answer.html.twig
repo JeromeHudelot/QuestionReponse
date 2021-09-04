@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/post_answer.css') }}">
+{% endblock %}
+
+{% block body %}
+
+	{{ form_start(form) }}
+		<div class="row">
+			<div class="col">
+				{{ form_errors(form.content) }}
+				<div  class="form-label">{{ form_label(form.content) }}</div>
+				<div  class="form-control">{{ form_widget(form.content) }}</div>
+			</div>
+		</div>
+	{{ form_end(form) }}
+
+{% endblock %}

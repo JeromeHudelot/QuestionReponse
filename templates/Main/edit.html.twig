@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+
+{% block body %}
+
+	{{ form_start(form) }}
+		<div class="my-custom-class-for-errors">
+			{{ form_errors(form) }}
+		</div>
+
+		<div class="row">
+			<div class="col">
+				{{ form_row(form.pseudo) }}
+			</div>
+			<div class="col">
+				{{ form_row(form.email) }}
+			</div>
+			<div class="col">
+				{{ form_row(form.password) }}
+			</div>
+		</div>
+	{{ form_end(form) }}
+
+{% endblock %}

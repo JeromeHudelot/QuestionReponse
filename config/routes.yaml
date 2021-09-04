@@ -1,0 +1,58 @@
+home:
+    path: /{page}
+    controller: App\Controller\MainController::home
+    methods:    GET
+    defaults:
+        page : 1
+    requirements:
+        page: '\d+'
+
+subscribe:
+    path: /inscription
+    controller: App\Controller\MainController::subscribe
+    methods:    GET|POST
+
+edit_user:
+    path: /user/edit
+    controller: App\Controller\MainController::edit
+    methods:    GET|POST
+
+post_question:
+    path: /question/post
+    controller: App\Controller\QuestionController::postQuestion
+    methods:    GET|POST
+
+post_comment_question:
+    path: /comment/post/{slug}
+    controller: App\Controller\QuestionController::postCommentQuestion
+    methods:    GET|POST
+
+post_comment_answer:
+    path: /comment/post/{id}
+    controller: App\Controller\QuestionController::postCommentAnswer
+    methods:    GET|POST
+    requirements:
+        id: '\d+'
+
+post_answer:
+    path: /answer/post/{slug}
+    controller: App\Controller\QuestionController::postAnswer
+    methods:    GET|POST
+
+subject:
+    path: /subject/{id}/{slug}
+    controller: App\Controller\QuestionController::subject
+    methods:    GET
+
+resolve:
+    path: /resolve/{slug}
+    controller: App\Controller\QuestionController::resolve
+    methods:    GET
+
+vote:
+    path: /vote/{id}/{value}
+    controller: App\Controller\QuestionController::vote
+    methods:    GET
+    requirements:
+        id: '\d+'
+        values: -1|1

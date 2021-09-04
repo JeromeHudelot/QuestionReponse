@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/home.css') }}">
+{% endblock %}
+
+{% block body %}
+
+	{% for question in questions %}
+	
+		<div class="question row">
+			<div class="title col-md-8">
+				<p><a href="{{ path('subject', { id : question.id, slug : question.slug }) }}">{{ question.title }}</a></p>
+			</div>
+			{% if question.resolve == true %}
+				<div class="resolve col-md-4">
+					<p>Résolue</p>
+				</div>
+			{% else %}
+				<div class="notResolve col-md-4">
+					<p>Non résolue</p>
+				</div>
+			{% endif %}
+			<div class="tags">
+				<p> Tag : 
+					{% if question.tags is defined and question.tags is not null %}
+					
+						{% for tag in question.tags %}
+						
+							{{ tag.title }} 
+						
+						{% endfor %}
+					
+					{% endif %}
+				</p>
+			</div>
+			<div class="author">
+				<p>Par {{ question.user.pseudo }}</p>
+			</div>
+			<br/>
+			<span class="date"><p>{{ question.postedAt|date("d/m/Y") }}</p></span>
+			<span class="content"><p>{{ question.content|slice(0, 100) }}</p></span>
+			<span class="answer"><p>Nombre de réponse : {{ question.answers|length }}</p></span>
+		</div>
+		<hr>
+	{% else %}
+	
+		<p>Aucune question n'a été posé.</p>
+		
+	{% endfor %}
+	{{ knp_pagination_render(questions) }}
+
+
+{% endblock %}

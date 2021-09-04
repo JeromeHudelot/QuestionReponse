@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/subject.css') }}">
+{% endblock %}
+
+{% block body %}
+
+	<h1>{{ question.title }}</h1>
+	<br/>
+	<p>Tag : 
+		{% if question.tags is defined and question.tags is not null %}
+		
+			{% for tag in question.tags %}
+			
+				{{ tag.title }} 
+			
+			{% endfor %}
+		
+		{% endif %}
+	<p> Par {{ question.user.pseudo }} le {{ question.postedAt|date("d/m/Y") }}</p>
+	<br/>
+	<p>{{ question.content }}</p>
+	<a href="{{ path('post_comment_question', { slug: question.slug}) }}">Poster un commentaire</a>
+	{% if app.user.id is same as (question.user.id) and question.resolve is same as(false) %}
+		<a href="{{ path('resolve', { slug: question.slug}) }}">Résolue</a>
+	{% endif %}
+	<hr>
+	{% if question.comments is defined and question.comments is not null %}
+		{% for comment in question.comments %}
+		
+			<p>{{ comment.user.pseudo }} le {{ comment.postedAt|date("d/m/Y") }}</p>
+			<p>{{ comment.content }}
+			<hr>
+		
+		{% endfor %}
+	{% endif %}
+	
+	<br/>
+	<a href="{{ path('post_answer', { slug: question.slug}) }}">Poster une réponse</a>
+	
+	{% if question.answers is defined and question.answers is not null %}
+		{% for answer in question.answers %}
+			<h3>Par {{ answer.user.pseudo }} le {{ answer.postedAt|date("d/m/Y") }}</h3>
+			<p>{{ answer.vote }} {% if answer.userVoteAnswer is defined and answer.userVoteAnswer is not null and answer.userVoteAnswer.vote is same as (true) %} Vous avez déjà voté {% else %}<a href="{{ path('vote', {id: answer.id, value: -1} )}}">-</a> <a href="{{ path('vote', {id: answer.id, value: 1} )}}">+</a> {% endif %}</p>
+			<p>{{ answer.content }}</p>
+			<a href="{{ path('post_comment_answer', { id: answer.id}) }}">Poster un commentaire</a>
+			<hr>
+			{% if answer.comments is defined and answer.comments is not null %}
+				{% for comment in answer.comments %}
+		
+					<p>{{ comment.user.pseudo }} le {{ comment.postedAt|date("d/m/Y") }}</p>
+					<p>{{ comment.content }}
+					<hr>
+				
+				{% endfor %}
+			{% endif %}
+			<br/>
+			<br/>
+			<br/>
+		{% endfor %}
+	{% endif %}
+{% endblock %}

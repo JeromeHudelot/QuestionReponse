@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Poser une question{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/post_question.css') }}">
+{% endblock %}
+
+{% block body %}
+
+	{{ form_start(form) }}
+
+		<div class="row">
+			<div class="col-md-5">
+				{{ form_errors(form.title) }}
+				<div  class="form-label">{{ form_label(form.title) }}</div>
+				<div  class="form-control">{{ form_widget(form.title) }}</div>
+			</div>
+			<ul class="col-md-7 tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e('html_attr') }}">
+				{{ form_label(form.tags) }}
+				{% for tag in form.tags %}
+					<li>
+						{{ form_errors(tag) }}
+						{{ form_widget(tag) }}
+					</li>
+				{% endfor %}
+				<button type="button" class="add_item_link" data-collection-holder-class="tags">Ajouter un tag</button>
+			</ul>
+		</div>
+		<div class="row">
+			<div class="col">
+				{{ form_errors(form.content) }}
+				<div  class="form-label">{{ form_label(form.content) }}</div>
+				<div  class="form-control">{{ form_widget(form.content) }}</div>
+			</div>
+		</div>
+	{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+	{{ parent() }}
+	<script type="text/javascript">
+		var $addTagLink = $('.add_item_link');
+		var $newLinkLi = $('<li></li>');
+
+		jQuery(document).ready(function() {
+		   var $collectionHolder = $('ul.tags');
+			
+			$collectionHolder.append($newLinkLi);
+			
+			$collectionHolder.data('index', $collectionHolder.find(':input').length);
+			
+			$addTagLink.on('click', function(e) {
+				e.preventDefault();
+				addTagForm($collectionHolder, $newLinkLi);
+			});
+			
+			
+		});
+			
+		function addTagForm($collectionHolder, $newLinkLi) {
+			var prototype = $collectionHolder.data('prototype');
+			
+			var index = $collectionHolder.data('index');
+			
+			var newForm = prototype.replace(/__name__/g, index);
+			
+			$collectionHolder.data('index', index + 1);
+			
+			var $newFormLi = $('<li></li>').append(newForm);
+			
+			$newFormLi.append('<a href="#" class="remove-tag">x</a>');
+			
+			$newLinkLi.before($newFormLi);
+			
+			$('.remove-tag').click(function(e) {
+				e.preventDefault();
+				
+				$(this).parent().remove();
+				
+				return false;
+			});
+		}
+	</script>
+	
+{% endblock %}
