@@ -24,7 +24,7 @@
 	<p> Par {{ question.user.pseudo }} le {{ question.postedAt|date("d/m/Y") }}</p>
 	<br/>
 	<p>{{ question.content }}</p>
-	<a href="{{ path('post_comment_question', { slug: question.slug}) }}">Poster un commentaire</a>
+	{% if is_granted('ROLE_USER') %}<a href="{{ path('post_comment_question', { slug: question.slug}) }}">Poster un commentaire</a>{% endif %}
 	{% if app.user.id is same as (question.user.id) and question.resolve is same as(false) %}
 		<a href="{{ path('resolve', { slug: question.slug}) }}">Résolue</a>
 	{% endif %}
@@ -40,14 +40,14 @@
 	{% endif %}
 	
 	<br/>
-	<a href="{{ path('post_answer', { slug: question.slug}) }}">Poster une réponse</a>
+	{% is_granted('ROLE_USER') %}<a href="{{ path('post_answer', { slug: question.slug}) }}">Poster une réponse</a>{% endif %}
 	
 	{% if question.answers is defined and question.answers is not null %}
 		{% for answer in question.answers %}
 			<h3>Par {{ answer.user.pseudo }} le {{ answer.postedAt|date("d/m/Y") }}</h3>
 			<p>{{ answer.vote }} {% if answer.userVoteAnswer is defined and answer.userVoteAnswer is not null and answer.userVoteAnswer.vote is same as (true) %} Vous avez déjà voté {% else %}<a href="{{ path('vote', {id: answer.id, value: -1} )}}">-</a> <a href="{{ path('vote', {id: answer.id, value: 1} )}}">+</a> {% endif %}</p>
 			<p>{{ answer.content }}</p>
-			<a href="{{ path('post_comment_answer', { id: answer.id}) }}">Poster un commentaire</a>
+			{% is_granted('ROLE_USER') %}<a href="{{ path('post_comment_answer', { id: answer.id}) }}">Poster un commentaire</a>{% endif %}
 			<hr>
 			{% if answer.comments is defined and answer.comments is not null %}
 				{% for comment in answer.comments %}
