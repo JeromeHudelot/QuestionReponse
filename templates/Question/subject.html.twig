@@ -24,9 +24,9 @@
 	<p> Par {{ question.user.pseudo }} le {{ question.postedAt|date("d/m/Y") }}</p>
 	<br/>
 	<p>{{ question.content }}</p>
-	{% if is_granted('ROLE_USER') %}<a href="{{ path('post_comment_question', { slug: question.slug}) }}">Poster un commentaire</a>{% endif %}
+	{% if is_granted('ROLE_USER') %}<a href="{{ path('post_comment_question', { slug: question.slug, id: question.id}) }}">Poster un commentaire</a>{% endif %}
 	{% if app.user.id is same as (question.user.id) and question.resolve is same as(false) %}
-		<a href="{{ path('resolve', { slug: question.slug}) }}">Résolue</a>
+		<a href="{{ path('resolve', { slug: question.slug, id: question.id}) }}">Résolue</a>
 	{% endif %}
 	<hr>
 	{% if question.comments is defined and question.comments is not null %}
@@ -40,7 +40,7 @@
 	{% endif %}
 	
 	<br/>
-	{% is_granted('ROLE_USER') %}<a href="{{ path('post_answer', { slug: question.slug}) }}">Poster une réponse</a>{% endif %}
+	{% is_granted('ROLE_USER') %}<a href="{{ path('post_answer', { slug: question.slug, id: question.id}) }}">Poster une réponse</a>{% endif %}
 	
 	{% if question.answers is defined and question.answers is not null %}
 		{% for answer in question.answers %}

@@ -60,7 +60,7 @@ class QuestionController extends AbstractController
 		
 	}
 	
-	public function postAnswer(Request $request, string $slug): Response
+	public function postAnswer(Request $request, string $slug, int $id): Response
 	{
 		$answer = new Answer();
 
@@ -75,7 +75,7 @@ class QuestionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $answer = $form->getData();
 			$repository = $this->getDoctrine()->getRepository(Question::class);
-			$question = $repository->findOneBySlug($slug);
+			$question = $repository->findOneBySlugAndId($id, $slug);
 			$answer->setUser($this->getUser());
 			$question->addAnswer($answer);
 			$answer->setVote(0);
@@ -96,7 +96,7 @@ class QuestionController extends AbstractController
         ]);
 	}
 	
-	public function postCommentQuestion(Request $request, string $slug): Response
+	public function postCommentQuestion(Request $request, string $slug, int $id): Response
 	{
 		$comment = new Comment();
 
@@ -111,7 +111,7 @@ class QuestionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment = $form->getData();
 			$repository = $this->getDoctrine()->getRepository(Question::class);
-			$question = $repository->findOneBySlug($slug);
+			$question = $repository->findOneBySlugAndId($id, $slug);
 			$comment->setUser($this->getUser());
 			$question->addComment($comment);
 			$comment->setPostedAt(new \DatetimeImmutable());
@@ -177,10 +177,10 @@ class QuestionController extends AbstractController
 		
 	}
 	
-	public function resolve(string $slug): Response
+	public function resolve(string $slug, int $id): Response
 	{
 		$repository = $this->getDoctrine()->getRepository(Question::class);
-		$question = $repository->findOneBySlug($slug);
+		$question = $repository->findOneBySlugAndId($id, $slug);
 		$question->setResolve(true);
 		$this->getDoctrine()->getManager()->flush();
 
